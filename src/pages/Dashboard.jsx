@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Code2, Trophy, Calendar, Users, FileText, Upload, 
-  LogOut, Menu, X, ArrowRight, Check, Github, Video, Link2, Trash2
+  LogOut, Menu, X, ArrowRight, Check, Github, Video, Link2, Trash2, Database, PenLine
 } from 'lucide-react';
 
 const Dashboard = ({ user, teamData, onLogout }) => {
   const navigate = useNavigate();
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadedVideo, setUploadedVideo] = useState(null);
+  const [uploadedDataset, setUploadedDataset] = useState(null);
   const [githubLink, setGithubLink] = useState('');
+  const [researchImpactNote, setResearchImpactNote] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [uploadingDataset, setUploadingDataset] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -75,6 +78,32 @@ const Dashboard = ({ user, teamData, onLogout }) => {
 
   const handleRemoveVideo = () => {
     setUploadedVideo(null);
+  };
+
+  const handleDatasetUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file size (max 50MB for dataset)
+      if (file.size > 50 * 1024 * 1024) {
+        setErrors({ ...errors, dataset: 'Dataset size must be less than 50MB' });
+        return;
+      }
+      // Validate file type
+      if (!file.name.toLowerCase().endsWith('.csv')) {
+        setErrors({ ...errors, dataset: 'Please upload a valid CSV file' });
+        return;
+      }
+      setErrors({ ...errors, dataset: '' });
+      setUploadingDataset(true);
+      setTimeout(() => {
+        setUploadedDataset(file);
+        setUploadingDataset(false);
+      }, 1500);
+    }
+  };
+
+  const handleRemoveDataset = () => {
+    setUploadedDataset(null);
   };
 
   const handleSubmit = () => {
@@ -294,7 +323,7 @@ const Dashboard = ({ user, teamData, onLogout }) => {
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                   <Github className="w-5 h-5 text-gray-600" />
-                  GitHub Repository Link <span className="text-red-500">*</span>
+                  Github / Collab/ Drive Repo link <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Link2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -466,6 +495,97 @@ const Dashboard = ({ user, teamData, onLogout }) => {
                     {errors.video}
                   </p>
                 )}
+              </div>
+
+              {/* Dataset Upload */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <Database className="w-5 h-5 text-gray-600" />
+                  Link to Dataset (Optional)
+                </label>
+                <input
+                  type="file"
+                  id="dataset-upload"
+                  onChange={handleDatasetUpload}
+                  accept=".csv"
+                  className="hidden"
+                />
+                <label htmlFor="dataset-upload" className="block cursor-pointer">
+                  <div className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${
+                    errors.dataset
+                      ? 'border-red-300 bg-red-50/50'
+                      : uploadedDataset
+                      ? 'border-teal-300 bg-teal-50/50'
+                      : 'border-gray-300 hover:border-teal-500 hover:bg-teal-50/50'
+                  }`}>
+                    {uploadingDataset ? (
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin" />
+                        <p className="text-gray-600 font-semibold">Uploading dataset...</p>
+                      </div>
+                    ) : uploadedDataset ? (
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30">
+                            <Database className="w-6 h-6 text-white" />
+                          </div>
+                          <div className="text-left">
+                            <p className="text-gray-900 font-bold">{uploadedDataset.name}</p>
+                            <p className="text-gray-600 text-sm">
+                              {(uploadedDataset.size / 1024 / 1024).toFixed(2)} MB
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.preventDefault(); handleRemoveDataset(); }}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 bg-linear-to-br from-teal-100 to-cyan-100 rounded-xl flex items-center justify-center">
+                          <Database className="w-6 h-6 text-teal-600" />
+                        </div>
+                        <div>
+                          <p className="text-gray-900 font-bold mb-1">
+                            Click to upload dataset
+                          </p>
+                          <p className="text-gray-600 text-sm">
+                            CSV files only (Max 50MB)
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {errors.dataset && (
+                  <p className="text-red-500 text-sm flex items-center gap-1">
+                    <X className="w-4 h-4" />
+                    {errors.dataset}
+                  </p>
+                )}
+              </div>
+
+              {/* Research Impact Note */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <PenLine className="w-5 h-5 text-gray-600" />
+                  Short Research Impact Note (Optional)
+                </label>
+                <textarea
+                  placeholder="Briefly describe the research impact and potential applications of your project..."
+                  value={researchImpactNote}
+                  onChange={(e) => setResearchImpactNote(e.target.value)}
+                  rows={4}
+                  maxLength={500}
+                  className="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-200 resize-none"
+                />
+                <p className="text-gray-500 text-sm text-right">
+                  {researchImpactNote.length}/500 characters
+                </p>
               </div>
 
               {/* Submit Button */}
