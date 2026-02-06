@@ -2,17 +2,16 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
-import TermsPage from '../pages/TermsPage';
 import Dashboard from '../pages/Dashboard';
 
-const AppRoutes = ({ user, teamData, termsAccepted, onLogin, onRegister, onAcceptTerms, onLogout }) => {
+const AppRoutes = ({ user, teamData, onLogin, onRegister, onLogout }) => {
   return (
     <Routes>
       {/* Login Route */}
       <Route 
         path="/login" 
         element={
-          user ? <Navigate to="/terms" replace /> : 
+          user ? <Navigate to="/dashboard" replace /> : 
           <LoginPage onLogin={onLogin} />
         } 
       />
@@ -21,18 +20,8 @@ const AppRoutes = ({ user, teamData, termsAccepted, onLogin, onRegister, onAccep
       <Route 
         path="/register" 
         element={
-          user ? <Navigate to="/terms" replace /> : 
+          user ? <Navigate to="/dashboard" replace /> : 
           <RegisterPage onRegister={onRegister} />
-        } 
-      />
-
-      {/* Terms & Conditions Route */}
-      <Route 
-        path="/terms" 
-        element={
-          !user ? <Navigate to="/login" replace /> :
-          termsAccepted ? <Navigate to="/dashboard" replace /> :
-          <TermsPage onAccept={onAcceptTerms} />
         } 
       />
 
@@ -40,7 +29,7 @@ const AppRoutes = ({ user, teamData, termsAccepted, onLogin, onRegister, onAccep
       <Route 
         path="/dashboard" 
         element={
-          !user || !termsAccepted ? <Navigate to="/login" replace /> :
+          !user ? <Navigate to="/login" replace /> :
           <Dashboard user={user} teamData={teamData} onLogout={onLogout} />
         } 
       />

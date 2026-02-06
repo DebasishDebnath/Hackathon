@@ -6,7 +6,6 @@ import './index.css';
 function App() {
   const [user, setUser] = useState(null);
   const [teamData, setTeamData] = useState(null);
-  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -17,14 +16,9 @@ function App() {
     setTeamData(team);
   };
 
-  const handleAcceptTerms = () => {
-    setTermsAccepted(true);
-  };
-
   const handleLogout = () => {
     setUser(null);
     setTeamData(null);
-    setTermsAccepted(false);
   };
 
   return (
@@ -33,10 +27,8 @@ function App() {
         <AppRoutes
           user={user}
           teamData={teamData}
-          termsAccepted={termsAccepted}
           onLogin={handleLogin}
           onRegister={handleRegister}
-          onAcceptTerms={handleAcceptTerms}
           onLogout={handleLogout}
         />
       </div>

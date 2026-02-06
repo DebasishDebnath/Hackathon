@@ -40,7 +40,7 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 -left-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
         <div className="absolute top-0 -right-4 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
@@ -48,7 +48,7 @@ const LoginPage = ({ onLogin }) => {
       </div>
 
       <div className="w-full max-w-md relative z-10">
-        {/* Logo Section */}
+
         <div className="text-center mb-8 animate-fade-in">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-blue-600 to-blue-500 rounded-2xl shadow-lg shadow-blue-500/50 mb-4">
             <Code2 className="w-8 h-8 text-white" />
@@ -59,10 +59,10 @@ const LoginPage = ({ onLogin }) => {
           <p className="text-gray-600">Welcome back to innovation</p>
         </div>
 
-        {/* Login Card */}
+
         <div className="bg-white rounded-3xl shadow-2xl shadow-blue-500/10 p-8 border border-gray-100 animate-slide-up">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Field */}
+
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-700">
                 Email Address
@@ -89,7 +89,6 @@ const LoginPage = ({ onLogin }) => {
               )}
             </div>
 
-            {/* Password Field */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-700">
                 Password
@@ -116,7 +115,6 @@ const LoginPage = ({ onLogin }) => {
               )}
             </div>
 
-            {/* Login Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -136,7 +134,6 @@ const LoginPage = ({ onLogin }) => {
             </button>
           </form>
 
-          {/* Register Link */}
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
             <p className="text-gray-600 text-sm">
               Don't have an account?{' '}
